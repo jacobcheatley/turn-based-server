@@ -1,0 +1,1 @@
+docker build -t turn-based-server . && docker run -it --rm --name turn-based-server-container --network host turn-based-server python server.py

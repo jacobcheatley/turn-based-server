@@ -27,7 +27,11 @@ def main(args):
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((args.server, args.port))
     send(client_socket, {"action": "identify", "name": args.name, "game_version": args.game_version})
-    send(client_socket, {"action": "create" if args.create else "join", "code": args.code})
+    if args.create:
+        send(client_socket, {"action": "create"})
+    else:
+        send(client_socket, {"action": "join", "code": args.code})
+
     t = TestClient(client_socket)
     t.daemon = True
     t.start()

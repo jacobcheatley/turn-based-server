@@ -178,7 +178,7 @@ class ClientThread(threading.Thread):
 
 def main(args):
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind(('localhost' if args.localhost else socket.gethostbyname(socket.gethostname()), args.port))
+    server_socket.bind((args.host, args.port))
     server_socket.listen(16)
     print(f"Listening on {server_socket}")
 
@@ -193,7 +193,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--port", default=9001, type=int)
-    parser.add_argument("--localhost", action="store_true")
+    parser.add_argument("--host", default="localhost")  # 0.0.0.0 for external
     args = parser.parse_args()
 
     main(args)

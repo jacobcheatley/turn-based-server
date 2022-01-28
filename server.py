@@ -1,8 +1,9 @@
+import json
+import random
 import socket
 import threading
-import json
 from typing import Dict, List
-import random
+
 
 class LobbyDoesntExistException(Exception):
     pass
@@ -130,6 +131,7 @@ class ClientThread(threading.Thread):
     def action_identify(self, d: dict):
         self.name = d["name"]
         self.game_version = d["game_version"]
+        self.send_json({"action": "message", "message": f"Hi {self.name} using {self.game_version}"})
 
     def action_create(self, d: dict):
         if self.name is None:

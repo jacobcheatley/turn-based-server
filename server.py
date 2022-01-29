@@ -26,9 +26,13 @@ class Lobby:
         self.clients: Dict[str, "ClientThread"] = {}
         self.max_players = 2
 
-    def message(self, d: dict):
+    def message(self, d: dict, exclude=None):
+        if exclude is None:
+            exclude = []
+
         for client_name, client_thread in self.clients.items():
-            client_thread.send_json(d)
+            if client_thread not in exclude:
+                client_thread.send_json(d)
 
     def disconnect(self, name: str):
         self.clients[name] = None
@@ -160,7 +164,7 @@ class ClientThread(threading.Thread):
         elif self.lobby is None:
             self.send_json({"action": "error", "type": "not_in_lobby"})
         else:
-            self.lobby.message({**d, "name": self.name})
+            self.lobby.message({**d, "name": self.name}, exclude=[self])
 
     def run(self):
         while True:
